@@ -125,7 +125,8 @@ echo '</script>';
                         </div>
                         <!-- Edit Profile Tab Content End -->
 
-                        <div class="tab-pane fade" id="changePass">
+                        <div class="tab-pane container fade" id="changePass">
+                            <div id="changepassAlert"></div>
     <div class="card-deck">
         <div class="card border-success">
             <div class="card-header bg-success text-white text-center lead">

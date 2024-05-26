@@ -219,6 +219,9 @@ public function change_password($pass, $id){
     $stmt -> execute(['pass' => $pass, 'id'=> $id]);
     return true;
 }
+
+
+
   
 
     
