@@ -126,103 +126,83 @@ echo '</script>';
                         <!-- Edit Profile Tab Content End -->
 
                         <div class="tab-pane fade" id="changePass">
-    <!-- Change Password content goes here -->
-    <div class="card">
-        <div class="card-header bg-warning text-white text-center lead">
-            Change Password
+    <div class="card-deck">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white text-center lead">
+                Change Password
+            </div>
+            <div class="card-body">
+                <form action="#" method="post" class="px-3 mt-2" id="change-pass-form">
+                    <div class="form-group">
+                        <label for="curpass">Enter Your Current Password</label>
+                        <input type="password" name="curpass" placeholder="Current Password" class="form-control form-control-lg" id="curpass" required minlength="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newpass">Enter New Password</label>
+                        <input type="password" name="newpass" placeholder="New Password" class="form-control form-control-lg" id="newpass" required minlength="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cnewpass">Confirm New Password</label>
+                        <input type="password" name="cnewpass" placeholder="Confirm New Password" class="form-control form-control-lg" id="cnewpass" required minlength="5">
+                    </div>
+
+                    <div class="form-group">
+                        <p id="changepassError" class="text-danger"></p>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <input type="submit" name="changepass" value="Change Password" class="btn btn-success btn-lg rounded-pill" id="changePassBtn">
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form action="#" method="post" class="px-3 mt-2" id="change-pass-form">
-                <div class="form-group">
-                    <label for="curpass">Enter Your Current Password</label>
-                    <input type="password" name="curpass" placeholder="Current Password" class="form-control form-control-lg" id="curpass" required minlength="5">
-                </div>
-
-                <div class="form-group">
-                    <label for="newpass">Enter New Password</label>
-                    <input type="password" name="newpass" placeholder="New Password" class="form-control form-control-lg" id="newpass" required minlength="5">
-                </div>
-
-               
-                <div class="form-group">
-                    <label for="cnewpass">Enter New Password</label>
-                    <input type="password" name="newpass" placeholder="Confirm New Password" class="form-control form-control-lg" id="cnewpass" required minlength="5">
-                </div>
-
-                <div class="form-group">
-                    <p id="changepassError" class="text-danger"></p>
-                </div>
-
-
-                <div class="form-group text-center">
-    <input type="submit" name="changepass" value="Change Password" class="btn btn-success btn-lg rounded-pill" id="changePassBtn">
-</div>
-
-
-
-
-
-            </form>
-        </div>
-
         <div class="card border-success align-self-center">
             <img src="assets/img/change.jpg" class="img-thumbnail img-fluid" width="408px">
-        </div>
-
-    </div>
-</div>
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="js/script.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
+<script src="js/script.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    // Profile Update Ajax Request
-    $("#profile-update-form").submit(function(e){
-        e.preventDefault();
-        console.log("Submitting profile update form...");
-
-        $.ajax({
-            url: 'assets/php/process.php',
-            method: 'post',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: new FormData(this),
-            success: function(response){
-                //console.log("Profile update successful:", response);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error("Error submitting profile update form:", xhr.responseText);
-            }
-        });
-    });
-
-    //Change Password Ajax Request
+    // Change Password Ajax Request
     $("#changePassBtn").click(function(e){
-       if($("#change-pass-form")[0].checkValidity()){
-        e.preventDefault();
-        $("#changePassBtn").val('Please Wait...');
+        if($("#change-pass-form")[0].checkValidity()){ // Verificar la validez del formulario
+            e.preventDefault(); // Prevenir el envío del formulario por defecto
+            $("#changePassBtn").val('Please Wait...'); // Cambiar el texto del botón a "Please Wait..."
 
-        if($("#newpass").val() != $("#cnewpass").val()){
-            $("#changepassError").text('* Password did not matched!');
-            $("#changePassBtn").val('Change Password');
-
+            // Verificar si las contraseñas coinciden
+            if($("#newpass").val() != $("#cnewpass").val()){
+                $("#changepassError").text('* Passwords do not match!'); // Mostrar un mensaje de error
+                $("#changePassBtn").val('Change Password'); // Restaurar el texto del botón
+            } else {
+                $.ajax({
+                    url: 'assets/php/process.php',
+                    method: 'post',
+                    data: $("#change-pass-form").serialize()+'&action=change_pass', // Serializar los datos del formulario
+                    success: function(response){
+                        $("#changepassAlert").html(response);
+                        $("#changePassBtn").val('Change Password');
+                        $("#changepassError").text(''); // Limpiar el mensaje de error
+                        $("#change-pass-form")[0].reset();
+                    },
+                    error: function(xhr, status, error){
+                        console.error("Error: " + xhr.responseText);
+                        $("#changepassError").text('Error changing password.');
+                        $("#changePassBtn").val('Change Password');
+                    }
+                });
+            }
         }
-       } 
     });
-
 });
 </script>
+
+
 
 
 

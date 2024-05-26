@@ -211,8 +211,16 @@ public function update_profile($name, $gender, $dob, $phone, $photo, $id) {
 
 
 
+//Change Password of An User
 
-    
+public function change_password($pass, $id){
+    $sql = "UPDATE users SET password = :pass WHERE id= :id AND deleted != 0";
+    $stmt = $this -> conn -> prepare($sql);
+    $stmt -> execute(['pass' => $pass, 'id'=> $id]);
+    return true;
+}
+  
+
     
     
     
