@@ -25,10 +25,28 @@ public function fetchAllUsers($val){
 
 //Fetch Users Details by ID
 
-// public function fetchUserDetailByID($id){
-//     $sql = "SELECT * FROM users WHERE id "
-// }
+ public function fetchUserDetailByID($id){
+     $sql = "SELECT * FROM users WHERE id = :id AND deleted != 0";
+     $stmt = $this -> conn -> prepare($sql);
+     $stmt -> execute(['id' => $id]);
 
+     $result = $stmt -> fetch(PDO::FETCH_ASSOC);
+
+     return $result;
+ }
+
+
+ // Delete An User
+
+ public function userAction($id, $val){
+    $sql = "UPDATE users SET deleted = $val WHERE id= :id";
+
+    $stmt = $this -> conn -> prepare($sql);
+
+    $stmt -> execute(['id'=> $id]);
+
+    return true;
+ }
 
 
 }

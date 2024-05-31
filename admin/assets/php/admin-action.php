@@ -75,4 +75,22 @@ if(isset($_POST['action']) && $_POST['action'] == 'fetchAllUsers'){
     }
 }
 
+//Handle display User In Details Ajax Requuest
+if(isset($_POST['details_id'])){
+    $id = $_POST['details_id'];
+
+    $data = $admin -> fetchUserDetailByID($id);
+
+    echo json_encode($data);
+}
+
+//Handle Delete an User Ajax Request
+
+if (isset($_POST['del_id'])) {
+    $id = $_POST['del_id'];
+    $admin->userAction($id, 0); // Assuming 1 indicates the user is deleted
+}
+
+
+
 ?>

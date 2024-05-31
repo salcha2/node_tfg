@@ -96,12 +96,67 @@
             type: 'post',
             data: { details_id: details_id},
             success: function(response){
-                console.log(response);
+                data = JSON.parse(response);
+                $("#getName").text(data.name+'  ' + '(ID: '+data.id+')');
+                $("#getEmail").text('Email : '+data.email);
+                $("#getPhone").text('Phone : '+data.telefono );
+                $("#getGender").text('Gender : '+data.gender);
+
+                $("#getDob").text('DOB : '+data.dob);
+
+                $("#getCreated").text('Joined On : '+data.created_at);
+                $("#getVerified").text('Verified : '+data.verified);
+
+
+                if (data.photo != '') {
+                    $("#getImage").html('<img src="../assets/php/' + data.photo + '" class="img-thumbnail img-fluid align-self-center" width="280px">');
+                } else {
+                    $("#getImage").html('<img src="../assets/img/profile.png" class="img-thumbnail img-fluid align-self-center" width="280px">');
+                }
+
+
+
+
+
             }
         })
 
 
     });
+
+    //delete an user ajax request
+    $("body").on("click", ".deleteUserIcon", function(e){
+    e.preventDefault();
+    var del_id = $(this).attr('id'); // Use .data('id') to get the data-id attribute value
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'assets/php/admin-action.php',
+                method: 'post',
+                data: { del_id: del_id },
+                success:function(response){
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your register has been deleted.",
+                        icon: "success"
+                    });
+                    fetchAllUsers();
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error: ", status, error);
+                }
+            });
+        }
+    });
+});
 
     });
 </script>
